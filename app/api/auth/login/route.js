@@ -35,7 +35,7 @@ export async function POST(request) {
 			});
 		}
 		if (!response.ok) {
-			const { statusCode, message, error } = await response.json();
+			const { statusCode, message } = await response.json();
 			return NextResponse.json(
 				{
 					message,

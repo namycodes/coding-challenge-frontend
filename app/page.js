@@ -210,7 +210,7 @@ export default function Home() {
 					<div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
 						{isFetching || isRefetching ? (
 							<>
-								{Array.from({ length: 6 }).map((_, index) => (
+								{Array.from({ length: 6 }).map(() => (
 									<Skeleton className="bg-white/20 h-[100px] w-[200px] rounded-lg" />
 								))}
 							</>
