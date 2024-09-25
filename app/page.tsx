@@ -1,101 +1,193 @@
+"use client";
+import SideBar from "@/components/custom/ui/sideBar";
+import { useQuery } from "@tanstack/react-query";
+import {
+	LucideCalendar,
+	LucideCloudRain,
+	LucideMapPin,
+	LucideSearch,
+	LucideThermometer,
+	LucideWind,
+} from "lucide-react";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
+import WeatherForecast from "@/components/custom/weatherForecast";
+import { useWeatherHook } from "./provider";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	const { setCity, city, countryCode, setCountryCode } = useWeatherHook();
+	const getCurrentWeatherDetails = async () => {
+		try {
+			const response = await fetch(
+				`/api/weather/current?city=${city}&countryCode=${countryCode}`
+			);
+			if (response.ok) {
+				const { data } = await response.json();
+				console.log(data);
+				return data;
+			}
+			if (!response.ok) {
+				const { data } = await response.json();
+				console.log(data?.data?.error);
+				return data;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	};
+	const { data, isFetching, isError, refetch, isRefetching } = useQuery({
+		queryKey: ["weather-details"],
+		queryFn: getCurrentWeatherDetails,
+	});
+	return (
+		<div className="flex gap-5 min-h-screen w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+			<div className="flex gap-10">
+				<SideBar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+				<div className="w-full px-4 flex flex-col gap-3 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
+					<div className="flex flex-col gap-5">
+						<div className=" flex w-full items-center justify-end gap-4">
+							<Input
+								required
+								value={city}
+								onChange={(e) => setCity(e.target.value)}
+								placeholder="(city) e.g Lusaka"
+								className="w-[200px] text-white placeholder-white border-none bg-white/15"
+							/>
+
+							<Input
+								required
+								value={countryCode}
+								onChange={(e) => setCountryCode(e.target.value)}
+								placeholder="(country code)e.g 260"
+								className="w-[200px] border-none bg-white/15  text-white placeholder-white"
+							/>
+
+							<Button
+								onClick={refetch}
+								className="bg-white/15 flex hover:bg-white/20 items-center"
+							>
+								<LucideSearch size={18} className="hover:cursor-pointer" />{" "}
+								Search
+							</Button>
+						</div>
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
+							<Image
+								// src={"/drizzle.gif"}
+								src={`https://openweathermap.org/img/w/${
+									data && data?.data[0]?.weather?.icon
+								}.png`}
+								width={50}
+								className="rounded-xl"
+								height={50}
+								alt="rain"
+							/>
+							<h1 className="text-[28px]">
+								{data && data?.data[0]?.app_temp}
+								<sup>oC</sup>
+							</h1>
+							<div className="flex gap-1 items-center">
+								<LucideCloudRain size={12} />
+								<h1 className="text-[10px]">
+									{data && data?.data[0]?.weather?.description}
+								</h1>
+							</div>
+							<hr />
+							<div className="flex gap-1 items-center">
+								<LucideMapPin size={12} />
+								<h1 className="text-[10px]">
+									{data &&
+										data?.data[0]?.city_name +
+											"," +
+											data?.data[0]?.country_code}
+								</h1>
+							</div>
+							<div className="flex gap-1 items-center">
+								<LucideCalendar size={12} />
+								<h1 className="text-[10px]">
+									{data && data?.data[0]?.datetime}
+								</h1>
+							</div>
+						</div>
+					</div>
+					<h1>Today{"'"}s Highlights</h1>
+					<div className="grid grid-cols-3 gap-4">
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+							<div className="flex items-center gap-4">
+								<h1 className="text-[13px]">Wind Status</h1>
+								<LucideWind />
+							</div>
+							<div className="flex items-center gap-6">
+								<Image
+									src="/wind.gif"
+									alt="wind"
+									width={50}
+									className="rounded-2xl"
+									height={50}
+								/>
+								<div>
+									<h1>{data && data?.data[0]?.wind_spd} m/s</h1>
+									<h1 className="capitalize text-sm">
+										{data &&
+											data?.data[0]?.wind_cdir_full +
+												" " +
+												`(${data?.data[0]?.wind_cdir})`}
+									</h1>
+								</div>
+							</div>
+						</div>
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+							<div className="flex items-center">
+								<h1 className="text-[13px]">Temperature</h1>
+								<LucideThermometer />
+							</div>
+							<h1 className="text-lg">
+								{data && data?.data[0]?.app_temp}
+								<sup>oC</sup>
+							</h1>
+						</div>
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+							<h1 className="text-[13px]">Humidity</h1>
+							<div className="flex items-center gap-5">
+								<Image
+									src="/humidity.gif"
+									alt="humidity"
+									width={50}
+									className="rounded-2xl"
+									height={50}
+								/>
+								<h1 className="text-lg">
+									{data && data?.data[0]?.rh}
+									<sub>%</sub>
+								</h1>
+							</div>
+						</div>
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+							<h1 className="text-[13px]">Air Quality</h1>
+							<div className="flex items-center gap-5">
+								<Image
+									src="/airquality.gif"
+									alt="air quality"
+									width={50}
+									className="rounded-2xl"
+									height={50}
+								/>
+								<h1 className="text-lg">{data && data?.data[0]?.aqi}</h1>
+							</div>
+						</div>
+						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+							<h1 className="text-[13px]">City Name</h1>
+							<h1>{data && data?.data[0]?.city_name}</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div className="w-[400px] flex flex-col gap-4">
+				<h1>16 days Forecast</h1>
+				<WeatherForecast />
+			</div>
+		</div>
+	);
 }
