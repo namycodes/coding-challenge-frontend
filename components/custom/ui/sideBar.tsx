@@ -24,7 +24,10 @@ export default function SideBar() {
 			<div className="bg-white/40 translate-y-10 h-[300px] blur-xl translate-x-2 w-[10px]  absolute" />
 			<div className="flex flex-col gap-3">
 				<div className="gap-2 flex ">
-					<LucideCloud size={30} className="text-blue-500" />
+					<Avatar>
+						<AvatarImage src="https://github.com/namycodes.png" />
+						<AvatarFallback>NC</AvatarFallback>
+					</Avatar>
 					<h1 className="text-[10px]">
 						24/7 Live Weather Forecast by @namycodes
 					</h1>
@@ -37,11 +40,7 @@ export default function SideBar() {
 				</div>
 			</div>
 			<div className="flex items-center w-full gap-4">
-				<Avatar>
-					<AvatarImage src="https://github.com/namycodes.png" />
-					<AvatarFallback>NC</AvatarFallback>
-				</Avatar>
-				<Button onClick={logout} variant={"ghost"} className="">
+				<Button onClick={logout} variant={"ghost"} className="w-full">
 					<LucideLogOut /> Logout
 				</Button>
 			</div>
