@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.js", "components/custom/weatherForecast.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.js", "components/custom/weatherForecast.js", "app/api/auth/login/route.js", "app/api/weather/current/route.js", "app/api/weather/forecast/daily/route.js"],
   "exclude": ["node_modules"]
 }

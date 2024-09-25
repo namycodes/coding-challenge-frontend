@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { serialize } from "cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const MAX_AGE: number = process.env.NEXT_PUBLIC_MAX_AGE;
-const COOKIE_NAME: string | undefined = process.env.NEXT_PUBLIC_COOKIE_NAME;
-export async function POST(request: Request) {
+const MAX_AGE= process.env.NEXT_PUBLIC_MAX_AGE;
+const COOKIE_NAME = process.env.NEXT_PUBLIC_COOKIE_NAME;
+export async function POST(request) {
 	const { email, password } = await request.json();
 	try {
 		const response = await fetch(`${API_URL}/auth/login`, {
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
 		});
 		if (response.ok) {
 			const { token, message, statusCode } = await response.json();
-			const serialized = serialize(COOKIE_NAME!, token, {
+			const serialized = serialize(COOKIE_NAME, token, {
 				maxAge: MAX_AGE,
 				httpOnly: true,
 				secure: process.env.NODE_ENV === "production",
