@@ -63,10 +63,11 @@ export default function Home() {
 				alert("An Error occured while logging out");
 			}
 		} catch (error) {
+			console.log(error)
 			alert("An Error occured while logging out");
 		}
 	};
-	const { data, isFetching, isError, refetch, isRefetching } = useQuery({
+	const { data, isFetching, refetch, isRefetching } = useQuery({
 		queryKey: ["weather-details"],
 		queryFn: getCurrentWeatherDetails,
 	});

@@ -16,6 +16,7 @@ export default function SideBar() {
 				alert("An Error occured while logging out");
 			}
 		} catch (error) {
+			console.log(error);
 			alert("An Error occured while logging out");
 		}
 	};

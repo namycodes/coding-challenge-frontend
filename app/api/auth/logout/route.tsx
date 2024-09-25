@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const COOKIE_NAME: any = process.env.NEXT_PUBLIC_COOKIE_NAME;
 
-export async function GET(request: Request) {
+export async function GET() {
 	try {
 		const cookieStorage = cookies();
 		await cookieStorage.delete(COOKIE_NAME);
