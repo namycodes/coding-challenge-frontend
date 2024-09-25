@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { serialize } from "cookie";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const MAX_AGE: number | string | any = process.env.NEXT_PUBLIC_MAX_AGE;
+const MAX_AGE: number = process.env.NEXT_PUBLIC_MAX_AGE;
 const COOKIE_NAME: string | undefined = process.env.NEXT_PUBLIC_COOKIE_NAME;
 export async function POST(request: Request) {
 	const { email, password } = await request.json();

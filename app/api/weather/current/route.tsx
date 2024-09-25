@@ -2,7 +2,7 @@ import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const COOKIE_NAME: RequestCookie | string | undefined | any =
+const COOKIE_NAME: RequestCookie | string | undefined =
 	process.env.NEXT_PUBLIC_COOKIE_NAME;
 export async function GET(request: Request) {
 	// Get Url Query Params

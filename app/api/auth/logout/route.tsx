@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const COOKIE_NAME: any = process.env.NEXT_PUBLIC_COOKIE_NAME;
+const COOKIE_NAME = process.env.NEXT_PUBLIC_COOKIE_NAME;
 
 export async function GET() {
 	try {
