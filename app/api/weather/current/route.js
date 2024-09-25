@@ -1,4 +1,3 @@
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -60,10 +59,11 @@ export async function GET(request) {
 			);
 		}
 	} catch (error) {
-		console.log(error);
+		
 		return NextResponse.json(
 			{
 				message: "Internal Server Error",
+				error
 			},
 			{
 				status: 500,
