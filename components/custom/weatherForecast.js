@@ -11,7 +11,7 @@ import {
 import { Skeleton } from "../ui/skeleton";
 
 export default function WeatherForecast() {
-	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [currentPage, setCurrentPage] = useState(1);
 	const ITEMS_PER_PAGE = 4;
 	const fetchWeatherForecast = async () => {
 		try {
