@@ -4,20 +4,36 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	LucideCalendar,
 	LucideCloudRain,
+	LucideLayoutGrid,
 	LucideLoader2,
+	LucideLogOut,
 	LucideMapPin,
 	LucideSearch,
 	LucideThermometer,
 	LucideWind,
 } from "lucide-react";
+import {
+	Drawer,
+	DrawerClose,
+	DrawerContent,
+	DrawerDescription,
+	DrawerFooter,
+	DrawerHeader,
+	DrawerTitle,
+	DrawerTrigger,
+} from "@/components/ui/drawer";
+
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import WeatherForecast from "@/components/custom/weatherForecast";
 import { useWeatherHook } from "./provider";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+	const { replace } = useRouter();
 	const { setCity, city, countryCode, setCountryCode } = useWeatherHook();
 	const getCurrentWeatherDetails = async () => {
 		try {
@@ -38,12 +54,68 @@ export default function Home() {
 			console.log(error);
 		}
 	};
+	const logout = async () => {
+		try {
+			const response = await fetch("/api/auth/logout");
+			if (response.ok) {
+				replace("/auth/login");
+			}
+			if (!response.ok) {
+				alert("An Error occured while logging out");
+			}
+		} catch (error) {
+			alert("An Error occured while logging out");
+		}
+	};
 	const { data, isFetching, isError, refetch, isRefetching } = useQuery({
 		queryKey: ["weather-details"],
 		queryFn: getCurrentWeatherDetails,
 	});
 	return (
-		<div className="flex gap-5 min-h-screen w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+		<div className="lg:flex p-5 flex-col lg:flex-row gap-5 min-h-screen w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+			<div className="lg:hidden">
+				<Drawer direction="left">
+					<DrawerTrigger>
+						<LucideLayoutGrid />
+					</DrawerTrigger>
+					<DrawerContent className="h-screen">
+						<DrawerHeader>
+							<DrawerTitle className="flex items-center">
+								<Avatar>
+									<AvatarImage src="https://github.com/namycodes.png" />
+									<AvatarFallback>NC</AvatarFallback>
+								</Avatar>
+								<div className="flex flex-col gap-2">
+									<h1 className="text-[10px]">
+										24/7 Live Weather Forecast by @namycodes
+									</h1>
+									<h1 className="text-[10px]">
+										Built with love by @namycodes.
+									</h1>
+								</div>
+							</DrawerTitle>
+						</DrawerHeader>
+						<div>
+							<Button className="flex justify-start gap-5 w-full">
+								<LucideLayoutGrid size={20} /> Dashboard
+							</Button>
+						</div>
+
+						<DrawerFooter className="flex flex-col gap-1 items-center">
+							<div className="flex items-center w-full gap-4">
+								<Button onClick={logout} className="bg-white text-black w-full">
+									<LucideLogOut /> Logout
+								</Button>
+							</div>
+							<DrawerClose className="w-full">
+								<Button variant="outline" className="w-full">
+									close
+								</Button>
+							</DrawerClose>
+						</DrawerFooter>
+					</DrawerContent>
+				</Drawer>
+			</div>
 			<div className="flex gap-10">
 				<SideBar />
 
@@ -55,7 +127,7 @@ export default function Home() {
 								value={city}
 								onChange={(e) => setCity(e.target.value)}
 								placeholder="(city) e.g Lusaka"
-								className="w-[200px] text-white placeholder-white border-none bg-white/15"
+								className="lg:w-[200px] text-white placeholder-white border-none bg-white/15"
 							/>
 
 							<Input
@@ -63,7 +135,7 @@ export default function Home() {
 								value={countryCode}
 								onChange={(e) => setCountryCode(e.target.value)}
 								placeholder="(country code)e.g 260"
-								className="w-[200px] border-none bg-white/15  text-white placeholder-white"
+								className="lg:w-[200px] border-none bg-white/15  text-white placeholder-white"
 							/>
 
 							<Button
@@ -135,7 +207,7 @@ export default function Home() {
 						</div>
 					</div>
 					<h1>Today{"'"}s Highlights</h1>
-					<div className="grid grid-cols-3 gap-4">
+					<div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
 						{isFetching || isRefetching ? (
 							<>
 								{Array.from({ length: 6 }).map((_, index) => (
@@ -217,7 +289,7 @@ export default function Home() {
 				</div>
 			</div>
 
-			<div className="w-[400px] flex flex-col gap-4">
+			<div className="w-full lg:w-[400px] flex flex-col gap-4">
 				<WeatherForecast />
 			</div>
 		</div>

@@ -1,16 +1,26 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-	LucideBellDot,
-	LucideCloud,
-	LucideLayoutGrid,
-	LucideLogOut,
-	LucideSettings,
-} from "lucide-react";
+import { LucideCloud, LucideLayoutGrid, LucideLogOut } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SideBar() {
+	const { replace } = useRouter();
+	const logout = async () => {
+		try {
+			const response = await fetch("/api/auth/logout");
+			if (response.ok) {
+				replace("/auth/login");
+			}
+			if (!response.ok) {
+				alert("An Error occured while logging out");
+			}
+		} catch (error) {
+			alert("An Error occured while logging out");
+		}
+	};
 	return (
-		<div className="h-full flex flex-col justify-between w-[400px] p-3 bg-white/15 rounded-2xl">
+		<div className="h-full lg:flex flex-col hidden justify-between w-[400px] p-3 bg-white/15 rounded-2xl">
 			<div className="bg-white/40 translate-y-10 h-[300px] blur-xl translate-x-2 w-[10px]  absolute" />
 			<div className="flex flex-col gap-3">
 				<div className="gap-2 flex ">
@@ -31,7 +41,7 @@ export default function SideBar() {
 					<AvatarImage src="https://github.com/namycodes.png" />
 					<AvatarFallback>NC</AvatarFallback>
 				</Avatar>
-				<Button variant={"ghost"} className="">
+				<Button onClick={logout} variant={"ghost"} className="">
 					<LucideLogOut /> Logout
 				</Button>
 			</div>

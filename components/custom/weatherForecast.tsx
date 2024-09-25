@@ -46,7 +46,7 @@ export default function WeatherForecast() {
 	};
 	const itemsToDisplay = getItemsForCurrentPage(currentPage);
 	return (
-		<div className="w-full px-4 flex flex-col gap-3 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
+		<div className="w-full  px-4 flex flex-col gap-3 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
 			<div className="flex justify-between w-full items-center ">
 				<h1>16 days Forecast</h1>
 				<Button onClick={refetch} className="bg-white/15 hover:bg-white/20">
