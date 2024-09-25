@@ -39,7 +39,7 @@ export default function WeatherForecast() {
 	// Pagination Implementation Logic
 	// data received from the useQuery has nested data objects thus the data?.data.....
 	const totalPages = Math.ceil(data?.data?.data?.length / ITEMS_PER_PAGE);
-	const getItemsForCurrentPage = (page: number) => {
+	const getItemsForCurrentPage = (page) => {
 		const startIndex = (page - 1) * ITEMS_PER_PAGE;
 		const endIndex = startIndex + ITEMS_PER_PAGE;
 		return data?.data?.data?.slice(startIndex, endIndex);
@@ -74,7 +74,7 @@ export default function WeatherForecast() {
 			)}
 			{itemsToDisplay &&
 				!isFetching &&
-				itemsToDisplay?.map((item: any, index: number) => (
+				itemsToDisplay?.map((item, index) => (
 					<div
 						key={index}
 						className="flex w-full items-center justify-between p-4 bg-white/15 shadow-lg rounded-lg "
