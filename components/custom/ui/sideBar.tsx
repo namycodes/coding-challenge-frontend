@@ -1,7 +1,7 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { LucideCloud, LucideLayoutGrid, LucideLogOut } from "lucide-react";
+import { LucideLayoutGrid, LucideLogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function SideBar() {
