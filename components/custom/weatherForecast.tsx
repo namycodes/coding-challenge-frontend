@@ -3,7 +3,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { LucideArrowLeftCircle, LucideArrowRightCircle } from "lucide-react";
+import {
+	LucideArrowLeftCircle,
+	LucideArrowRightCircle,
+	LucideLoader2,
+} from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 
 export default function WeatherForecast() {
@@ -28,7 +32,7 @@ export default function WeatherForecast() {
 			console.log(error);
 		}
 	};
-	const { data, isFetching, isError } = useQuery({
+	const { data, isFetching, isError, refetch, isRefetching } = useQuery({
 		queryKey: ["16-day-weather-forecast"],
 		queryFn: fetchWeatherForecast,
 	});
@@ -43,6 +47,16 @@ export default function WeatherForecast() {
 	const itemsToDisplay = getItemsForCurrentPage(currentPage);
 	return (
 		<div className="w-full px-4 flex flex-col gap-3 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
+			<div className="flex justify-between w-full items-center ">
+				<h1>16 days Forecast</h1>
+				<Button onClick={refetch} className="bg-white/15 hover:bg-white/20">
+					{isRefetching ? (
+						<LucideLoader2 size={15} className="animate-spin" />
+					) : (
+						"Refresh"
+					)}
+				</Button>
+			</div>
 			{isFetching &&
 				Array.from({ length: 4 }).map((_, index) => (
 					<Skeleton

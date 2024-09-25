@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
 	LucideCalendar,
 	LucideCloudRain,
+	LucideLoader2,
 	LucideMapPin,
 	LucideSearch,
 	LucideThermometer,
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import WeatherForecast from "@/components/custom/weatherForecast";
 import { useWeatherHook } from "./provider";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {
 	const { setCity, city, countryCode, setCountryCode } = useWeatherHook();
@@ -68,124 +70,154 @@ export default function Home() {
 								onClick={refetch}
 								className="bg-white/15 flex hover:bg-white/20 items-center"
 							>
-								<LucideSearch size={18} className="hover:cursor-pointer" />{" "}
-								Search
+								{isRefetching ? (
+									""
+								) : (
+									<LucideSearch size={18} className="hover:cursor-pointer" />
+								)}
+								{isRefetching ? (
+									<div className="flex gap-1 items-center">
+										<LucideLoader2 size={13} className="animate-spin" />
+										<h1 className="text-[13px]">loading</h1>
+									</div>
+								) : (
+									"Search"
+								)}
 							</Button>
 						</div>
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
-							<Image
-								// src={"/drizzle.gif"}
-								src={`https://openweathermap.org/img/w/${
-									data && data?.data[0]?.weather?.icon
-								}.png`}
-								width={50}
-								className="rounded-xl"
-								height={50}
-								alt="rain"
-							/>
-							<h1 className="text-[28px]">
-								{data && data?.data[0]?.app_temp}
-								<sup>oC</sup>
-							</h1>
-							<div className="flex gap-1 items-center">
-								<LucideCloudRain size={12} />
-								<h1 className="text-[10px]">
-									{data && data?.data[0]?.weather?.description}
-								</h1>
-							</div>
-							<hr />
-							<div className="flex gap-1 items-center">
-								<LucideMapPin size={12} />
-								<h1 className="text-[10px]">
-									{data &&
-										data?.data[0]?.city_name +
-											"," +
-											data?.data[0]?.country_code}
-								</h1>
-							</div>
-							<div className="flex gap-1 items-center">
-								<LucideCalendar size={12} />
-								<h1 className="text-[10px]">
-									{data && data?.data[0]?.datetime}
-								</h1>
-							</div>
+						<div className="w-full px-4 flex flex-col gap-2 h-auto py-5 bg-white/10 shadow-sm rounded-xl">
+							{isFetching || isRefetching ? (
+								<Skeleton className="rounded-[50px] w-[30px] bg-white/20 h-[30px]" />
+							) : (
+								<Image
+									src={`https://www.weatherbit.io/static/img/icons/${
+										data && data?.data[0]?.weather?.icon
+									}.png`}
+									width={50}
+									className="rounded-xl"
+									height={50}
+									alt="rain"
+								/>
+							)}
+
+							{isFetching || isRefetching ? (
+								<Skeleton className="w-full h-[150px] bg-white/20" />
+							) : (
+								<>
+									<h1 className="text-[28px]">
+										{data && data?.data[0]?.app_temp}
+										<sup>oC</sup>
+									</h1>
+									<div className="flex gap-1 items-center">
+										<LucideCloudRain size={12} />
+										<h1 className="text-[10px]">
+											{data && data?.data[0]?.weather?.description}
+										</h1>
+									</div>
+									<hr />
+									<div className="flex gap-1 items-center">
+										<LucideMapPin size={12} />
+										<h1 className="text-[10px]">
+											{data &&
+												data?.data[0]?.city_name +
+													"," +
+													data?.data[0]?.country_code}
+										</h1>
+									</div>
+									<div className="flex gap-1 items-center">
+										<LucideCalendar size={12} />
+										<h1 className="text-[10px]">
+											{data && data?.data[0]?.datetime}
+										</h1>
+									</div>
+								</>
+							)}
 						</div>
 					</div>
 					<h1>Today{"'"}s Highlights</h1>
 					<div className="grid grid-cols-3 gap-4">
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
-							<div className="flex items-center gap-4">
-								<h1 className="text-[13px]">Wind Status</h1>
-								<LucideWind />
-							</div>
-							<div className="flex items-center gap-6">
-								<Image
-									src="/wind.gif"
-									alt="wind"
-									width={50}
-									className="rounded-2xl"
-									height={50}
-								/>
-								<div>
-									<h1>{data && data?.data[0]?.wind_spd} m/s</h1>
-									<h1 className="capitalize text-sm">
-										{data &&
-											data?.data[0]?.wind_cdir_full +
-												" " +
-												`(${data?.data[0]?.wind_cdir})`}
+						{isFetching || isRefetching ? (
+							<>
+								{Array.from({ length: 6 }).map((_, index) => (
+									<Skeleton className="bg-white/20 h-[100px] w-[200px] rounded-lg" />
+								))}
+							</>
+						) : (
+							<>
+								<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+									<div className="flex items-center gap-4">
+										<h1 className="text-[13px]">Wind Status</h1>
+										<LucideWind />
+									</div>
+									<div className="flex items-center gap-6">
+										<Image
+											src="/wind.gif"
+											alt="wind"
+											width={50}
+											className="rounded-2xl"
+											height={50}
+										/>
+										<div>
+											<h1>{data && data?.data[0]?.wind_spd} m/s</h1>
+											<h1 className="capitalize text-sm">
+												{data &&
+													data?.data[0]?.wind_cdir_full +
+														" " +
+														`(${data?.data[0]?.wind_cdir})`}
+											</h1>
+										</div>
+									</div>
+								</div>
+								<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+									<div className="flex items-center">
+										<h1 className="text-[13px]">Temperature</h1>
+										<LucideThermometer />
+									</div>
+									<h1 className="text-lg">
+										{data && data?.data[0]?.app_temp}
+										<sup>oC</sup>
 									</h1>
 								</div>
-							</div>
-						</div>
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
-							<div className="flex items-center">
-								<h1 className="text-[13px]">Temperature</h1>
-								<LucideThermometer />
-							</div>
-							<h1 className="text-lg">
-								{data && data?.data[0]?.app_temp}
-								<sup>oC</sup>
-							</h1>
-						</div>
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
-							<h1 className="text-[13px]">Humidity</h1>
-							<div className="flex items-center gap-5">
-								<Image
-									src="/humidity.gif"
-									alt="humidity"
-									width={50}
-									className="rounded-2xl"
-									height={50}
-								/>
-								<h1 className="text-lg">
-									{data && data?.data[0]?.rh}
-									<sub>%</sub>
-								</h1>
-							</div>
-						</div>
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
-							<h1 className="text-[13px]">Air Quality</h1>
-							<div className="flex items-center gap-5">
-								<Image
-									src="/airquality.gif"
-									alt="air quality"
-									width={50}
-									className="rounded-2xl"
-									height={50}
-								/>
-								<h1 className="text-lg">{data && data?.data[0]?.aqi}</h1>
-							</div>
-						</div>
-						<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
-							<h1 className="text-[13px]">City Name</h1>
-							<h1>{data && data?.data[0]?.city_name}</h1>
-						</div>
+								<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+									<h1 className="text-[13px]">Humidity</h1>
+									<div className="flex items-center gap-5">
+										<Image
+											src="/humidity.gif"
+											alt="humidity"
+											width={50}
+											className="rounded-2xl"
+											height={50}
+										/>
+										<h1 className="text-lg">
+											{data && data?.data[0]?.rh}
+											<sub>%</sub>
+										</h1>
+									</div>
+								</div>
+								<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+									<h1 className="text-[13px]">Air Quality</h1>
+									<div className="flex items-center gap-5">
+										<Image
+											src="/airquality.gif"
+											alt="air quality"
+											width={50}
+											className="rounded-2xl"
+											height={50}
+										/>
+										<h1 className="text-lg">{data && data?.data[0]?.aqi}</h1>
+									</div>
+								</div>
+								<div className="w-full px-4 flex flex-col gap-1 h-auto py-5 bg-white/15 shadow-sm rounded-xl">
+									<h1 className="text-[13px]">City Name</h1>
+									<h1>{data && data?.data[0]?.city_name}</h1>
+								</div>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
 
 			<div className="w-[400px] flex flex-col gap-4">
-				<h1>16 days Forecast</h1>
 				<WeatherForecast />
 			</div>
 		</div>

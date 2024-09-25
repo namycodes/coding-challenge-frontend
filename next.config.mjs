@@ -2,7 +2,7 @@
 const nextConfig = {
     images:{
         domains: [
-            'openweathermap.org'
+            'www.weatherbit.io'
         ]
     }
 };
