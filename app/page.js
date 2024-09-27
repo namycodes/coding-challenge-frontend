@@ -72,7 +72,7 @@ export default function Home() {
 		queryFn: getCurrentWeatherDetails,
 	});
 	return (
-		<div className="lg:flex p-5 flex-col lg:flex-row gap-5 min-h-screen w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+		<div className="lg:flex p-5 flex flex-col lg:flex-row gap-5 min-h-screen overflow-hidden w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="lg:hidden">
 				<Drawer direction="left">
 					<DrawerTrigger>
@@ -211,7 +211,7 @@ export default function Home() {
 						{isFetching || isRefetching ? (
 							<>
 								{Array.from({ length: 6 }).map((index) => (
-									<Skeleton key={index} className="bg-white/20 h-[100px] w-[200px] rounded-lg" />
+									<Skeleton key={index} className="bg-white/20 h-[100px] w-[180px] rounded-lg" />
 								))}
 							</>
 						) : (

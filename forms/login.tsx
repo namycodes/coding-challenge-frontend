@@ -19,6 +19,7 @@ import { z } from "zod";
 export default function LoginForm() {
 	const [isFormSubmiting, setIsformSubmiting] = useState<boolean>(false);
 	const [errorMessage, setErrorMessage] = useState<string>("");
+	const [loggedIn, setLoggedIn] = useState<boolean>(false);
 	const { replace } = useRouter();
 	const form = useForm<z.infer<typeof LoginSchema>>({
 		resolver: zodResolver(LoginSchema),
@@ -42,6 +43,7 @@ export default function LoginForm() {
 				console.log(message);
 				setIsformSubmiting(false);
 				setErrorMessage("");
+				setLoggedIn(true);
 				replace("/");
 			}
 			if (!response.ok) {
@@ -88,9 +90,18 @@ export default function LoginForm() {
 						</FormItem>
 					)}
 				/>
-				<Button disabled={isFormSubmiting} className="" type="submit">
+				<Button
+					disabled={isFormSubmiting || loggedIn}
+					className=""
+					type="submit"
+				>
 					{isFormSubmiting ? (
 						<LucideLoader2 className="animate-spin" />
+					) : loggedIn ? (
+						<div className="flex gap-5 items-center">
+							<LucideLoader2 className="animate-spin" />
+							<h1>Redirecting....</h1>
+						</div>
 					) : (
 						"Login"
 					)}

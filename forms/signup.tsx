@@ -149,7 +149,7 @@ export default function SignUpForm() {
 					{isFormSubmiting ? (
 						<LucideLoader2 className="animate-spin" />
 					) : (
-						"Login"
+						"Signup"
 					)}
 				</Button>
 			</form>
