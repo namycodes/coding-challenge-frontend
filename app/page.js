@@ -72,7 +72,7 @@ export default function Home() {
 		queryFn: getCurrentWeatherDetails,
 	});
 	return (
-		<div className="lg:flex p-5 flex flex-col lg:flex-row gap-5 min-h-screen overflow-hidden w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+		<div className="lg:flex p-5 max-w-screen-md flex flex-col lg:flex-row gap-5 min-h-screen overflow-hidden w-full pb-20 lg:p-6 sm:p-20 font-[family-name:var(--font-geist-sans)]">
 			<div className="lg:hidden">
 				<Drawer direction="left">
 					<DrawerTrigger>
